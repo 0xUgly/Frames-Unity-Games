@@ -12,8 +12,11 @@ import { Button } from "~/components/Button";
 import { shortenAddress } from "thirdweb/utils";
 import { prepareTransaction, sendTransaction } from "thirdweb";
 import { base } from "thirdweb/chains";
+interface AppProps {
+  title: string;
+}
 
-export default function App() {
+const App: React.FC<AppProps> = ({ title }) => {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
   const [context, setContext] = useState<FrameContext>();
   const { connect } = useConnect();
@@ -49,6 +52,7 @@ export default function App() {
 
   return (
     <main className="bg-slate-900 h-screen w-screen text-white">
+    <h1>{title}</h1>
     <div className="w-[300px] mx-auto py-4 px-2 pt-32">
       <div className="flex flex-col items-center gap-2 mb-8">
         <div className="rounded-full m-auto overflow-hidden border-slate-800 border-2 size-32">
@@ -103,3 +107,6 @@ export default function App() {
     </main>
   );
 }
+
+
+export default App;
