@@ -4,7 +4,7 @@ import { useEffect, useCallback, useState } from "react";
 import sdk, {
   type FrameContext,
 } from "@farcaster/frame-sdk";
-
+import { ClientPage } from "./ClientRender";
 import { useActiveAccount, useActiveWallet, useConnect } from "thirdweb/react";
 import { EIP1193 } from "thirdweb/wallets";
 import { ThirdwebClient } from "~/constants";
@@ -12,11 +12,8 @@ import { Button } from "~/components/Button";
 import { shortenAddress } from "thirdweb/utils";
 import { prepareTransaction, sendTransaction } from "thirdweb";
 import { base } from "thirdweb/chains";
-interface AppProps {
-  title: string;
-}
 
-const App: React.FC<AppProps> = ({ title }) => {
+export default function App() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
   const [context, setContext] = useState<FrameContext>();
   const { connect } = useConnect();
@@ -52,7 +49,6 @@ const App: React.FC<AppProps> = ({ title }) => {
 
   return (
     <main className="bg-slate-900 h-screen w-screen text-white">
-    <h1>{title}</h1>
     <div className="w-[300px] mx-auto py-4 px-2 pt-32">
       <div className="flex flex-col items-center gap-2 mb-8">
         <div className="rounded-full m-auto overflow-hidden border-slate-800 border-2 size-32">
@@ -74,39 +70,8 @@ const App: React.FC<AppProps> = ({ title }) => {
         }
       </div>
 
-      <div className="flex justify-stretch flex-col gap-2">
-        {!wallet ?
-          <Button disabled={!isSDKLoaded} onClick={connectWallet}>Connect Wallet</Button>
-          :
-          <>
-            <Button disabled={!isSDKLoaded} onClick={wallet.disconnect}>Disconnect Wallet</Button>
-            <Button disabled={!isSDKLoaded} onClick={async () => {
-              if (!account) {
-                alert("Transaction failed: No account connected");
-                return;
-              }
-              
-              if (wallet.getChain()?.id !== base.id) {
-                await wallet.switchChain(base);
-              }
-
-              const tx = prepareTransaction({
-                chain: base,
-                to: account.address,
-                value: 10000n,
-                client: ThirdwebClient,
-              })
-              sendTransaction({ transaction: tx, account });
-            }}>
-              Send Transaction
-            </Button>
-          </>
-      }
-      </div>
+     <ClientPage/>
     </div>
     </main>
   );
 }
-
-
-export default App;
