@@ -1,7 +1,23 @@
+"use client"
 import Image from "next/image"
 import Footer from "./Footer"
 import Header from "./Header"
-export default function Ui() {
+import { useRouter } from 'next/navigation' // Add this import
+interface Ui {
+  isLoading: boolean;
+  selectedGame: string;
+  onGameSelect: (game: string) => void;
+}
+
+const Ui: React.FC<Ui> = ({ isLoading, selectedGame, onGameSelect }) => {
+  const router = useRouter(); // Add this
+
+
+  const handleGameSelect = (game: string) => {
+      onGameSelect(game);
+      router.push(`/${game}`); // Add explicit navigation
+     
+  };
     return (
       <div className="min-h-screen bg-[#000814] text-white">
         <div className="mx-auto max-w-sm">
@@ -45,7 +61,9 @@ export default function Ui() {
                   <div className="h-12 w-12 rounded-lg bg-blue-500/20"></div>
                   <span className="font-semibold">TRAILBLAZER</span>
                 </div>
-                <button className="rounded-lg border border-[#4241ff] px-6 py-2 text-sm font-medium text-[#4241ff]">
+                <button className="rounded-lg border border-[#4241ff] px-6 py-2 text-sm font-medium text-[#4241ff]"
+                onClick={() => handleGameSelect("unity2")}
+                disabled={isLoading}>
                   PLAY
                 </button>
               </div>
@@ -102,5 +120,5 @@ export default function Ui() {
       </div>
     )
   }
-  
+  export default Ui;
   

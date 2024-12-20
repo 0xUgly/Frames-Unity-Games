@@ -17,6 +17,6 @@ export default function App() {
 
 
   return (
-    <Ui/>
+    <ClientPage/>
   );
 }

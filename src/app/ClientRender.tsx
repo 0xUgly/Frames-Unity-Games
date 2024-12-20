@@ -1,5 +1,5 @@
 "use client";
-import Main from "~/components/Main";
+import Ui from "~/components/ui";
 import { useState } from "react";
 
 export const ClientPage = () => {
@@ -14,7 +14,7 @@ export const ClientPage = () => {
   };
 
   return (
-    <Main
+    <Ui
       isLoading={isLoading}
       selectedGame={selectedGame}
       onGameSelect={handleGameSelect}
