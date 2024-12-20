@@ -10,7 +10,7 @@ const frame = {
     title: "Launch Frame",
     action: {
       type: "launch_frame",
-      name: "Thirdweb Frames Starter",
+      name: "Rupture Labs",
       url: appUrl,
       splashImageUrl: `${appUrl}/splash.png`,
       splashBackgroundColor: "#0f172a",
@@ -22,10 +22,10 @@ export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Thirdweb Frames Starter",
+    title: "Rupture Labs ",
     openGraph: {
-      title: "Thirdweb Frames Starter",
-      description: "A Thirdweb frames starter app.",
+      title: "Rupture Labs Frames",
+      description: "Lets start Gaming ",
     },
     other: {
       "fc:frame": JSON.stringify(frame),
