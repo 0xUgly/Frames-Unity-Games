@@ -40,8 +40,8 @@ const Ui: React.FC<Ui> = ({ isLoading, selectedGame, onGameSelect }) => {
             {/* List Progress */}
             <div className="mt-12">
               <div className="flex items-center gap-1">
-                <span className="text-lg font-bold">LIST</span>
-                <div className="flex flex-1 items-center gap-1 px-2">
+                <div className="w-full text-lg font-bold text-center">GAMES</div>
+                {/* <div className="flex flex-1 items-center gap-1 px-2">
                   {Array.from({ length: 16 }).map((_, i) => (
                     <div
                       key={i}
@@ -50,7 +50,7 @@ const Ui: React.FC<Ui> = ({ isLoading, selectedGame, onGameSelect }) => {
                       }`}
                     ></div>
                   ))}
-                </div>
+                </div> */}
               </div>
             </div>
   
@@ -59,7 +59,7 @@ const Ui: React.FC<Ui> = ({ isLoading, selectedGame, onGameSelect }) => {
               <div className="flex items-center justify-between rounded-xl bg-[#0A1238] p-4">
                 <div className="flex items-center gap-4">
                   <div className="h-12 w-12 rounded-lg bg-blue-500/20 bg-center  bg-cover bg-[url('/gameimg/TrailblazeronBASE.png')]"></div>
-                  <span className="font-semibold">TRAILBLAZER</span>
+                  <span className="font-semibold">Paws of Fury</span>
                 </div>
                 <button className="rounded-lg border border-[#4241ff] px-6 py-2 text-sm font-medium text-[#4241ff]"
                 onClick={() => handleGameSelect("unity2")}
@@ -68,6 +68,29 @@ const Ui: React.FC<Ui> = ({ isLoading, selectedGame, onGameSelect }) => {
                 </button>
               </div>
             </div>
+            <div className="mt-4 ">
+              <div className="flex items-center justify-between rounded-xl bg-[#0A1238] p-4">
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-lg bg-blue-500/20 bg-center  bg-cover "></div>
+                  <span className="font-semibold blur-sm">Atlas</span>
+                </div>
+                <button className="rounded-lg border border-[#4241ff] px-2 py-2 text-sm font-medium text-[#4241ff]">
+                  Coming Soon
+                </button>
+              </div>
+            </div>
+            <div className="mt-4 ">
+              <div className="flex items-center justify-between rounded-xl bg-[#0A1238] p-4">
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-lg bg-blue-500/20 bg-center  bg-cover "></div>
+                  <span className="font-semibold blur-sm">Farms</span>
+                </div>
+                <button className="rounded-lg border border-[#4241ff] px-2 py-2 text-sm font-medium text-[#4241ff]">
+                  Coming Soon
+                </button>
+              </div>
+            </div>
+
   
             {/* Bottom Navigation */}
             
