@@ -4,8 +4,8 @@ import { ThirdwebProvider } from "thirdweb/react";
 import "~/app/globals.css";
 
 export const metadata: Metadata = {
-  title: "Farcaster Frames v2 Demo",
-  description: "A Farcaster Frames v2 demo app",
+  title: "Rupture Labs FramesV2",
+  description: "Unity Based WebGL games based on FramesV2 by Rupture Labs",
 };
 
 export default function RootLayout({
