@@ -1,3 +1,4 @@
+// app/unity4/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -13,22 +14,27 @@ function Unity4Page() {
   };
 
   useEffect(() => {
-    addLog("Starting game initialization");
+    addLog("Unity4Page mounted");
     
     try {
-      // Create container
+      // Check if we're in the browser
+      if (typeof window === 'undefined') {
+        addLog("❌ Window not available");
+        return;
+      }
+
+      addLog("Creating game container...");
       const container = document.createElement("div");
       container.id = "unity4-container";
       document.body.appendChild(container);
       addLog("Container created ✓");
 
-      // Create iframe
+      addLog("Setting up game iframe...");
       const iframe = document.createElement("iframe");
       const gamePath = `/unity4-webgl/index.html?${searchParams.toString()}`;
       iframe.src = gamePath;
       addLog(`Game path set to: ${gamePath}`);
 
-      // Set iframe styles
       iframe.style.border = "none";
       iframe.style.width = "100%";
       iframe.style.height = "100vh";
@@ -36,9 +42,8 @@ function Unity4Page() {
       iframe.style.top = "0";
       iframe.style.left = "0";
       iframe.style.zIndex = "1";
-      addLog("Iframe styles set ✓");
+      addLog("Iframe styles applied ✓");
 
-      // Add load handlers
       iframe.onload = () => {
         addLog("✅ Game iframe loaded successfully");
       };
@@ -47,29 +52,35 @@ function Unity4Page() {
         addLog("❌ Failed to load game iframe");
       };
 
-      // Add iframe to container
       container.appendChild(iframe);
-      addLog("Iframe added to page ✓");
+      addLog("Iframe added to container ✓");
 
     } catch (error) {
-      addLog(`❌ Error occurred: ${error}`);
+      addLog(`❌ Error: ${error}`);
     }
 
     return () => {
-      const container = document.getElementById("unity4-container");
-      if (container) {
-        document.body.removeChild(container);
-        addLog("Cleanup complete ✓");
+      addLog("Cleanup starting...");
+      try {
+        const container = document.getElementById("unity4-container");
+        if (container) {
+          document.body.removeChild(container);
+          addLog("Cleanup complete ✓");
+        } else {
+          addLog("❌ Container not found during cleanup");
+        }
+      } catch (error) {
+        addLog(`❌ Cleanup error: ${error}`);
       }
     };
   }, [searchParams]);
 
   return (
-   <></>
+<></>
   );
 }
 
-export default function UnityPage4() {
+export default function Unity4WithSuspense() {
   return (
     <Suspense fallback={
       <div className="fixed inset-0 flex items-center justify-center bg-black text-white">
