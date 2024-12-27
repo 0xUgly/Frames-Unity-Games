@@ -12,7 +12,7 @@ const frame = {
       type: "launch_frame",
       name: "Rupture Labs",
       url: appUrl,
-      splashImageUrl: `${appUrl}/splash.png`,
+      splashImageUrl: `${appUrl}/splash1.png`,
       splashBackgroundColor: "#0f172a",
     },
   },

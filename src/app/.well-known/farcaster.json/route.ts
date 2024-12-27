@@ -16,7 +16,7 @@ export async function GET() {
       homeUrl: appUrl,
       imageUrl: `${appUrl}/frame.png`,
       buttonTitle: "Launch Frame",
-      splashImageUrl: `${appUrl}/splash.png`,
+      splashImageUrl: `${appUrl}/splash1.png`,
       splashBackgroundColor: "#0f172a",
     },
   };
