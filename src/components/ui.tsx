@@ -68,17 +68,35 @@ const Ui: React.FC<Ui> = ({ isLoading, selectedGame, onGameSelect }) => {
                 </button>
               </div>
             </div>
+
+
+            <div className="mt-8">
+              <div className="flex items-center justify-between rounded-xl bg-[#0A1238] p-4">
+                <div className="flex items-center gap-4">
+                  <div className="h-12 w-12 rounded-lg bg-blue-500/20 bg-center  bg-cover bg-[url('/gameimg/baseballz.png')]"></div>
+                  <span className="font-semibold">Base Ballz</span>
+                </div>
+                <button className="rounded-lg border border-[#4241ff] px-6 py-2 text-sm font-medium text-[#4241ff]"
+                onClick={() => handleGameSelect("unity4")}
+                disabled={isLoading}>
+                  PLAY
+                </button>
+              </div>
+            </div>
+
+{/*             
             <div className="mt-4 ">
               <div className="flex items-center justify-between rounded-xl bg-[#0A1238] p-4">
                 <div className="flex items-center gap-4">
                   <div className="h-12 w-12 rounded-lg bg-blue-500/20 bg-center  bg-cover "></div>
-                  <span className="font-semibold blur-sm">Atlas</span>
+                  <span className="font-semibold blur-sm">Base Ballz</span>
                 </div>
                 <button className="rounded-lg border border-[#4241ff] px-2 py-2 text-sm font-medium text-[#4241ff]">
-                  Coming Soon
+                  Play
                 </button>
               </div>
-            </div>
+            </div> */}
+
             <div className="mt-4 ">
               <div className="flex items-center justify-between rounded-xl bg-[#0A1238] p-4">
                 <div className="flex items-center gap-4">
