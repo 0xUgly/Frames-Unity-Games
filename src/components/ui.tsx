@@ -62,7 +62,7 @@ const Ui: React.FC<Ui> = ({ isLoading, selectedGame, onGameSelect }) => {
                   <span className="font-semibold">Paws of Fury</span>
                 </div>
                 <button className="rounded-lg border border-[#4241ff] px-6 py-2 text-sm font-medium text-[#4241ff]"
-                onClick={() => handleGameSelect("unity2")}
+                onClick={() => handleGameSelect("unity4")}
                 disabled={isLoading}>
                   PLAY
                 </button>
@@ -77,7 +77,7 @@ const Ui: React.FC<Ui> = ({ isLoading, selectedGame, onGameSelect }) => {
                   <span className="font-semibold">Base Ballz</span>
                 </div>
                 <button className="rounded-lg border border-[#4241ff] px-6 py-2 text-sm font-medium text-[#4241ff]"
-                onClick={() => handleGameSelect("unity4")}
+                onClick={() => handleGameSelect("unity2")}
                 disabled={isLoading}>
                   PLAY
                 </button>
