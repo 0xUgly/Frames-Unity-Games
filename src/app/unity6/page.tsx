@@ -1,5 +1,4 @@
-// app/unity6/page.tsx is 
-// for BASE NEKO
+// app/unity6/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
