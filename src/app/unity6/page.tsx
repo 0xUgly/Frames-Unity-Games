@@ -1,11 +1,11 @@
-// app/unity2/page.tsx
+// app/unity6/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
-function Unity2Page() {
+function Unity6Page() {
   const searchParams = useSearchParams();
   const [logs, setLogs] = useState<string[]>([]);
 
@@ -14,7 +14,7 @@ function Unity2Page() {
   };
 
   useEffect(() => {
-    addLog("Unity2Page mounted");
+    addLog("Unity6Page mounted");
     
     try {
       // Check if we're in the browser
@@ -25,13 +25,13 @@ function Unity2Page() {
 
       addLog("Creating game container...");
       const container = document.createElement("div");
-      container.id = "unity2-container";
+      container.id = "unity6-container";
       document.body.appendChild(container);
       addLog("Container created ✓");
 
       addLog("Setting up game iframe...");
       const iframe = document.createElement("iframe");
-      const gamePath = `/unity2-webgl/index.html?${searchParams.toString()}`;
+      const gamePath = `/unity6-webgl/index.html?${searchParams.toString()}`;
       iframe.src = gamePath;
       addLog(`Game path set to: ${gamePath}`);
 
@@ -62,7 +62,7 @@ function Unity2Page() {
     return () => {
       addLog("Cleanup starting...");
       try {
-        const container = document.getElementById("unity2-container");
+        const container = document.getElementById("unity6-container");
         if (container) {
           document.body.removeChild(container);
           addLog("Cleanup complete ✓");
@@ -80,14 +80,14 @@ function Unity2Page() {
   );
 }
 
-export default function Unity2WithSuspense() {
+export default function Unity6WithSuspense() {
   return (
     <Suspense fallback={
       <div className="fixed inset-0 flex items-center justify-center bg-black text-white">
         Loading game...
       </div>
     }>
-      <Unity2Page />
+      <Unity6Page />
     </Suspense>
   );
 }
