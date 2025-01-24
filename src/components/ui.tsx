@@ -20,8 +20,8 @@ const Ui: React.FC<Ui> = ({ isLoading, selectedGame, onGameSelect }) => {
   };
     return (
       <div className="min-h-screen bg-[#000814] text-white">
-        <div className="mx-auto max-w-sm">
-          <div className="relative min-h-screen bg-[#020B2D] px-6 py-4">
+        <div className="mx-auto max-w-sm ">
+          <div className="relative min-h-screen  pb-24 bg-[#020B2D] px-6 py-4">
             {/* Top Navigation */}
         <Header/>
   
@@ -111,14 +111,16 @@ const Ui: React.FC<Ui> = ({ isLoading, selectedGame, onGameSelect }) => {
               </div>
             </div> */}
 
-            <div className="mt-4 ">
+<div className="mt-8">
               <div className="flex items-center justify-between rounded-xl bg-[#0A1238] p-4">
                 <div className="flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-lg bg-blue-500/20 bg-center  bg-cover "></div>
-                  <span className="font-semibold blur-sm">Farms</span>
+                  <div className="h-12 w-12 rounded-lg bg-blue-500/20 bg-center  bg-cover bg-[url('/gameimg/survivalbase.webp')]"></div>
+                  <span className="font-semibold">Survival Base</span>
                 </div>
-                <button className="rounded-lg border border-[#4241ff] px-2 py-2 text-sm font-medium text-[#4241ff]">
-                  Coming Soon
+                <button className="rounded-lg border border-[#4241ff] px-6 py-2 text-sm font-medium text-[#4241ff]"
+                onClick={() => handleGameSelect("unity3")}
+                disabled={isLoading}>
+                  PLAY
                 </button>
               </div>
             </div>

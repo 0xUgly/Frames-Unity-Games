@@ -30,7 +30,7 @@ function Footer() {
 
 
       {/* Bottom Navigation */}
-<div className="fixed bottom-0 left-0 right-0  from-black to-transparent pb-4 pt-8 ">
+<div className="backdrop-blur-md fixed bottom-0 left-0 right-0  from-black to-transparent pb-4 pt-8 ">
               <div className="mx-auto flex max-w-sm items-center justify-between px-12">
                 <button className="text-white/60"
                  onClick={() => {
