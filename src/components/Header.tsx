@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useCallback, useState } from "react";
-import Image from "next/image";
 import { JsonRpcProvider, Contract } from "ethers";
 import sdk, { type FrameContext } from "@farcaster/frame-sdk";
 import { useActiveAccount, useActiveWallet, useConnect } from "thirdweb/react";
@@ -15,13 +14,16 @@ function Header() {
   const wallet = useActiveWallet();
   const account = useActiveAccount();
   const [basename, setBasename] = useState<string | null>(null);
+  const [debugOutput, setDebugOutput] = useState<string>(""); // For debugging
 
   const contractAddress = "0x03c4738Ee98aE44591e1A4A4F3CaB6641d95DD9a";
   const rpcUrl = "https://mainnet.base.org";
   const abi = [
     "function name() public pure returns (string memory)",
     "function symbol() public pure returns (string memory)",
-    "function tokenURI(uint256 tokenId) public view returns (string)"
+    "function tokenURI(uint256 tokenId) public view returns (string)",
+    "function balanceOf(address owner) public view returns (uint256)",
+    "function tokenOfOwnerByIndex(address owner, uint256 index) public view returns (uint256)"
   ];
 
   const connectWallet = useCallback(async () => {
@@ -41,33 +43,41 @@ function Header() {
       try {
         const provider = new JsonRpcProvider(rpcUrl);
         const contract = new Contract(contractAddress, abi, provider);
-
-        // Fetch the number of tokens owned by the wallet
+  
+        setDebugOutput("Fetching balance...");
         const balance = await contract.balanceOf(account.address);
-
+  
         if (balance > 0) {
-          // Get the first token ID owned by the wallet
+          setDebugOutput(`Balance: ${balance.toString()}`);
           const tokenId = await contract.tokenOfOwnerByIndex(account.address, 0);
-
-          // Fetch the token URI for the token ID
+  
+          setDebugOutput((prev) => prev + `\nToken ID: ${tokenId}`);
           const tokenURI = await contract.tokenURI(tokenId);
-
-          // Fetch the metadata from the token URI
+  
+          setDebugOutput((prev) => prev + `\nToken URI: ${tokenURI}`);
           const metadataUrl = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/");
           const metadataResponse = await fetch(metadataUrl);
           const metadata = await metadataResponse.json();
-
+  
           setBasename(metadata.name || null);
+          setDebugOutput((prev) => prev + `\nMetadata: ${JSON.stringify(metadata)}`);
         } else {
-          console.log("No tokens owned by this wallet.");
+          setDebugOutput("No tokens owned by this wallet.");
           setBasename(null);
         }
       } catch (error) {
-        console.error("Failed to fetch basename:", error);
+        if (error instanceof Error) {
+          console.error("Failed to fetch basename:", error.message);
+          setDebugOutput(`Error: ${error.message}`);
+        } else {
+          console.error("Unknown error occurred:", error);
+          setDebugOutput("Unknown error occurred.");
+        }
         setBasename(null);
       }
     }
   }, [account?.address]);
+  
 
   useEffect(() => {
     const load = async () => {
@@ -88,55 +98,20 @@ function Header() {
   }, [account?.address, fetchBasename]);
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="text-xl font-bold">
-        <Image
-          src="/partners/rl.png"
-          height={30}
-          width={30}
-          alt=""
-          className=""
-        />
+    <div className="flex flex-col items-center">
+      <div className="flex items-center justify-between w-full">
+        <h1 className="text-xl font-bold">Farcaster Header</h1>
       </div>
-      <div className="flex flex-col items-center gap-2">
-        <div className="rounded-full m-auto overflow-hidden border-slate-800 border-2 size-16">
-          {context?.user.pfpUrl ? (
-            <img
-              className="object-cover size-full"
-              src={context?.user.pfpUrl}
-              alt={context?.user.displayName ?? "User Profile Picture"}
-              width={50}
-              height={50}
-            />
-          ) : (
-            <div className="flex items-center justify-center size-full bg-slate-800 animate-pulse rounded-full" />
-          )}
+      {account?.address && (
+        <div className="text-center">
+          <p className="text-sm">
+            {basename ? `Basename: ${basename}` : `Address: ${shortenAddress(account.address)}`}
+          </p>
         </div>
-        <div className="w-full flex justify-center items-center text-center">
-          {context?.user.displayName ? (
-            <h1 className="text-md font-bold text-center">
-              {context?.user.displayName}
-            </h1>
-          ) : (
-            <div className="animate-pulse w-36 m-auto h-8 bg-slate-800 rounded-md" />
-          )}
-        </div>
-        {account?.address && (
-          <div className="w-full flex justify-center items-center text-center">
-            <p className="text-sm text-slate-500">
-              {basename ? basename : shortenAddress(account.address)}
-            </p>
-          </div>
-        )}
-      </div>
-      <div className="text-xl">
-        <Image
-          src="/basenet/BASE LOGO.png"
-          height={30}
-          width={30}
-          alt=""
-          className=""
-        />
+      )}
+      <div className="bg-gray-100 p-4 mt-4 rounded w-full">
+        <h2 className="text-md font-bold">Debug Output</h2>
+        <pre className="text-sm whitespace-pre-wrap">{debugOutput}</pre>
       </div>
     </div>
   );
