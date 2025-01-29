@@ -1,6 +1,9 @@
 "use client";
-import React, { useEffect, useState, useCallback } from "react";
-import { useActiveAccount } from "thirdweb/react";
+import React, { useEffect, useCallback, useState } from "react";
+import sdk, { type FrameContext } from "@farcaster/frame-sdk";
+import { useActiveAccount, useActiveWallet, useConnect } from "thirdweb/react";
+import { EIP1193 } from "thirdweb/wallets";
+import { ThirdwebClient } from "~/constants";
 import { shortenAddress } from "thirdweb/utils";
 import {
   Address,
@@ -47,9 +50,25 @@ async function fetchBasenameFromResolver(address: Address): Promise<string | nul
 }
 
 function Header() {
+  const [isSDKLoaded, setIsSDKLoaded] = useState(false);
+  const [context, setContext] = useState<FrameContext>();
+  const { connect } = useConnect();
+  const wallet = useActiveWallet();
   const account = useActiveAccount();
   const [basename, setBasename] = useState<string | null>(null);
   const [debugOutput, setDebugOutput] = useState<string>("Fetching Basename...");
+
+  const connectWallet = useCallback(async () => {
+    connect(async () => {
+      const wallet = EIP1193.fromProvider({
+        provider: sdk.wallet.ethProvider,
+      });
+
+      await wallet.connect({ client: ThirdwebClient });
+
+      return wallet;
+    });
+  }, [connect]);
 
   // **Fetch Basename with Resolver**
   const fetchBasename = useCallback(async () => {
@@ -70,6 +89,20 @@ function Header() {
       setDebugOutput(`Error: ${error instanceof Error ? error.message : "Unknown error"}`);
     }
   }, [account?.address]);
+
+  useEffect(() => {
+    const load = async () => {
+      setContext(await sdk.context);
+      sdk.actions.ready({});
+    };
+    if (sdk && !isSDKLoaded) {
+      setIsSDKLoaded(true);
+      load();
+      if (sdk.wallet) {
+        connectWallet();
+      }
+    }
+  }, [isSDKLoaded, connectWallet]);
 
   useEffect(() => {
     fetchBasename();
