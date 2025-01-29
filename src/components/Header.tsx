@@ -44,65 +44,74 @@ function Header() {
       setDebugOutput("No active account found.");
       return;
     }
-
+  
     try {
       const provider = new JsonRpcProvider(rpcUrl);
       const contract = new Contract(contractAddress, abi, provider);
-
-      setDebugOutput("Fetching balance...");
-      const balance = await contract.balanceOf(account.address);
-
-      if (balance.toString() === "0") {
+  
+      // Step 1: Get balance
+      const balance: bigint = await contract.balanceOf(account.address);
+      setDebugOutput(`Balance: ${balance.toString()}`);
+  
+      if (balance === 0n) {
         setDebugOutput("No tokens owned by this wallet.");
         setBasename(null);
         return;
       }
-
-      setDebugOutput((prev) => prev + `\nBalance: ${balance.toString()}`);
-
-      // Attempt to get the first token owned by the wallet
+  
+      // Step 2: Try finding a valid token owned by the user
       let tokenId: number | undefined;
-      for (let i = 0; i < balance; i++) {
+      for (let i = 0; i < Number(balance); i++) {
         try {
-          tokenId = i;
-          const owner = await contract.ownerOf(tokenId);
+          const testTokenId = i;
+          const owner: string = await contract.ownerOf(testTokenId);
           if (owner.toLowerCase() === account.address.toLowerCase()) {
+            tokenId = testTokenId;
             break;
           }
         } catch (err) {
           continue;
         }
       }
-
+  
       if (tokenId === undefined) {
         setDebugOutput("No valid token found for this wallet.");
         return;
       }
-
+  
       setDebugOutput((prev) => prev + `\nToken ID: ${tokenId}`);
-
-      // Fetch the token URI for metadata
-      const tokenURI = await contract.tokenURI(tokenId);
-      setDebugOutput((prev) => prev + `\nToken URI: ${tokenURI}`);
-
-      // Convert IPFS URI to a public gateway URL
-      const metadataUrl = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/");
-      const metadataResponse = await fetch(metadataUrl);
-      const metadata = await metadataResponse.json();
-
-      setBasename(metadata.name || null);
-      setDebugOutput((prev) => prev + `\nMetadata: ${JSON.stringify(metadata)}`);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Failed to fetch basename:", error.message);
-        setDebugOutput(`Error: ${error.message}`);
-      } else {
-        console.error("Unknown error occurred:", error);
-        setDebugOutput("Unknown error occurred.");
+  
+      // Step 3: Fetch token URI
+      let tokenURI: string = "";
+      try {
+        tokenURI = await contract.tokenURI(tokenId);
+        setDebugOutput((prev) => prev + `\nToken URI: ${tokenURI}`);
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : "Unknown error";
+        setDebugOutput((prev) => prev + `\nError fetching token URI: ${errorMsg}`);
+        return;
       }
-      setBasename(null);
+  
+      // Step 4: Fetch metadata
+      try {
+        const metadataUrl: string = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/");
+        const metadataResponse: Response = await fetch(metadataUrl);
+        const metadata: { name?: string } = await metadataResponse.json();
+  
+        setBasename(metadata.name || null);
+        setDebugOutput((prev) => prev + `\nMetadata: ${JSON.stringify(metadata)}`);
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : "Unknown error";
+        setDebugOutput((prev) => prev + `\nError fetching metadata: ${errorMsg}`);
+      }
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : "Unknown error";
+      setDebugOutput(`Error: ${errorMsg}`);
     }
-  }, [account?.address]);
+  }, [account?.address, abi]); // ✅ Fix: Include abi in the dependency array
+  
+  
+  
 
   useEffect(() => {
     const load = async () => {
