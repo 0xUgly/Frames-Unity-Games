@@ -1,131 +1,75 @@
 "use client";
-import React, { useEffect, useCallback, useState } from "react";
-import { JsonRpcProvider, Contract } from "ethers";
-import sdk, { type FrameContext } from "@farcaster/frame-sdk";
-import { useActiveAccount, useActiveWallet, useConnect } from "thirdweb/react";
-import { EIP1193 } from "thirdweb/wallets";
-import { ThirdwebClient } from "~/constants";
+import React, { useEffect, useState, useCallback } from "react";
+import { useActiveAccount } from "thirdweb/react";
 import { shortenAddress } from "thirdweb/utils";
+import {
+  Address,
+  createPublicClient,
+  encodePacked,
+  http,
+  keccak256,
+} from "viem";
+import { base } from "viem/chains";
+
+// **Replace with the actual L2 Resolver contract address**
+const BASENAME_L2_RESOLVER_ADDRESS: Address = "0xC6d566A56A1aFf6508b41f6c90ff131615583BCD";
+
+// **Create Public Client for Base Mainnet**
+const baseClient = createPublicClient({
+  chain: base,
+  transport: http(),
+});
+
+// **Convert Address to Reverse Node Hash**
+function convertReverseNodeToBytes(address: Address): `0x${string}` {
+  const reverseNode = `${address.toLowerCase().substring(2)}.addr.reverse`;
+  return keccak256(encodePacked(["string"], [reverseNode]));
+}
+
+// **Fetch Basename from Resolver Contract**
+async function fetchBasenameFromResolver(address: Address): Promise<string | null> {
+  try {
+    const addressReverseNode: `0x${string}` = convertReverseNodeToBytes(address);
+    
+    // **Explicitly cast return value as string**
+    const basename = (await baseClient.readContract({
+      abi: ["function name(bytes32 node) view returns (string)"],
+      address: BASENAME_L2_RESOLVER_ADDRESS,
+      functionName: "name",
+      args: [addressReverseNode],
+    })) as string;
+
+    return basename && typeof basename === "string" ? basename : null;
+  } catch (error) {
+    console.error("Error resolving Basename:", error);
+    return null;
+  }
+}
 
 function Header() {
-  const [isSDKLoaded, setIsSDKLoaded] = useState(false);
-  const [context, setContext] = useState<FrameContext>();
-  const { connect } = useConnect();
-  const wallet = useActiveWallet();
   const account = useActiveAccount();
   const [basename, setBasename] = useState<string | null>(null);
-  const [debugOutput, setDebugOutput] = useState<string>(""); // For debugging
+  const [debugOutput, setDebugOutput] = useState<string>("Fetching Basename...");
 
-  // Base Mainnet Contract & RPC Details
-  const contractAddress = "0x03c4738Ee98aE44591e1A4A4F3CaB6641d95DD9a";
-  const rpcUrl = "https://mainnet.base.org";
-
-  // Updated Contract ABI based on provided ABI
-  const abi = [
-    "function balanceOf(address owner) view returns (uint256)",
-    "function ownerOf(uint256 tokenId) view returns (address)",
-    "function tokenURI(uint256 tokenId) view returns (string)"
-  ];
-
-  const connectWallet = useCallback(async () => {
-    connect(async () => {
-      const wallet = EIP1193.fromProvider({
-        provider: sdk.wallet.ethProvider,
-      });
-
-      await wallet.connect({ client: ThirdwebClient });
-
-      return wallet;
-    });
-  }, [connect]);
-
+  // **Fetch Basename with Resolver**
   const fetchBasename = useCallback(async () => {
     if (!account?.address) {
       setDebugOutput("No active account found.");
       return;
     }
-  
+
     try {
-      const provider = new JsonRpcProvider(rpcUrl);
-      const contract = new Contract(contractAddress, abi, provider);
-  
-      // Step 1: Get balance
-      const balance: bigint = await contract.balanceOf(account.address);
-      setDebugOutput(`Balance: ${balance.toString()}`);
-  
-      if (balance === 0n) {
-        setDebugOutput("No tokens owned by this wallet.");
-        setBasename(null);
-        return;
-      }
-  
-      // Step 2: Try finding a valid token owned by the user
-      let tokenId: number | undefined;
-      for (let i = 0; i < Number(balance); i++) {
-        try {
-          const testTokenId = i;
-          const owner: string = await contract.ownerOf(testTokenId);
-          if (owner.toLowerCase() === account.address.toLowerCase()) {
-            tokenId = testTokenId;
-            break;
-          }
-        } catch (err) {
-          continue;
-        }
-      }
-  
-      if (tokenId === undefined) {
-        setDebugOutput("No valid token found for this wallet.");
-        return;
-      }
-  
-      setDebugOutput((prev) => prev + `\nToken ID: ${tokenId}`);
-  
-      // Step 3: Fetch token URI
-      let tokenURI: string = "";
-      try {
-        tokenURI = await contract.tokenURI(tokenId);
-        setDebugOutput((prev) => prev + `\nToken URI: ${tokenURI}`);
-      } catch (error) {
-        const errorMsg = error instanceof Error ? error.message : "Unknown error";
-        setDebugOutput((prev) => prev + `\nError fetching token URI: ${errorMsg}`);
-        return;
-      }
-  
-      // Step 4: Fetch metadata
-      try {
-        const metadataUrl: string = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/");
-        const metadataResponse: Response = await fetch(metadataUrl);
-        const metadata: { name?: string } = await metadataResponse.json();
-  
-        setBasename(metadata.name || null);
-        setDebugOutput((prev) => prev + `\nMetadata: ${JSON.stringify(metadata)}`);
-      } catch (error) {
-        const errorMsg = error instanceof Error ? error.message : "Unknown error";
-        setDebugOutput((prev) => prev + `\nError fetching metadata: ${errorMsg}`);
+      const name = await fetchBasenameFromResolver(account.address as Address);
+      if (name) {
+        setBasename(name);
+        setDebugOutput(`Basename found: ${name}`);
+      } else {
+        setDebugOutput("No Basename found for this address.");
       }
     } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : "Unknown error";
-      setDebugOutput(`Error: ${errorMsg}`);
+      setDebugOutput(`Error: ${error instanceof Error ? error.message : "Unknown error"}`);
     }
-  }, [account?.address, abi]); // ✅ Fix: Include abi in the dependency array
-  
-  
-  
-
-  useEffect(() => {
-    const load = async () => {
-      setContext(await sdk.context);
-      sdk.actions.ready({});
-    };
-    if (sdk && !isSDKLoaded) {
-      setIsSDKLoaded(true);
-      load();
-      if (sdk.wallet) {
-        connectWallet();
-      }
-    }
-  }, [isSDKLoaded, connectWallet]);
+  }, [account?.address]);
 
   useEffect(() => {
     fetchBasename();
