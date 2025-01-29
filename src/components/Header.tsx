@@ -26,6 +26,7 @@ function Header() {
     "function tokenOfOwnerByIndex(address owner, uint256 index) public view returns (uint256)"
   ];
 
+  
   const connectWallet = useCallback(async () => {
     connect(async () => {
       const wallet = EIP1193.fromProvider({
