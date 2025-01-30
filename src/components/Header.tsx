@@ -9,9 +9,11 @@ import { shortenAddress } from "thirdweb/utils";
 import { base } from "viem/chains";
 import { Name } from "@coinbase/onchainkit/identity";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://framegames.xyz/"; // ✅ Set correct domain
+
 function Header() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
-  const [context, setContext] = useState<FrameContext>();
+  const [context, setContext] = useState<FrameContext | null>(null); // ✅ Ensure correct type
   const { connect } = useConnect();
   const wallet = useActiveWallet();
   const account = useActiveAccount();
@@ -30,9 +32,16 @@ function Header() {
 
   useEffect(() => {
     const load = async () => {
-      setContext(await sdk.context);
-      sdk.actions.ready({});
+      try {
+        const frameContext = await sdk.context; // ✅ Await the correct context
+
+        setContext(frameContext); // ✅ Set the correct Farcaster context
+        sdk.actions.ready({});
+      } catch (error) {
+        console.error("Error fetching Farcaster context:", error);
+      }
     };
+
     if (sdk && !isSDKLoaded) {
       setIsSDKLoaded(true);
       load();
