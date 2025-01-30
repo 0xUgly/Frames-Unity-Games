@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ThirdwebProvider } from "thirdweb/react";
+import { Providers } from './providers'; 
 
 import "~/app/globals.css";
 
@@ -17,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThirdwebProvider>
-          {children}
+          <Providers>{children}</Providers>
         </ThirdwebProvider>
       </body>
     </html>
