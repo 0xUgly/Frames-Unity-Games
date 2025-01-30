@@ -48,7 +48,7 @@ function Header() {
       <div className="flex items-center justify-between">
         {/* Left Logo */}
         <div className="text-xl font-bold">
-          <Image src="/partners/rl.png" height={30} width={30} alt="" className="" />
+          <Image src="/partners/rl.png" height={30} width={30} alt="" />
         </div>
 
         {/* Center User Info */}
@@ -79,7 +79,7 @@ function Header() {
             )}
           </div>
 
-          {/* Basename or Wallet Address */}
+          {/* Basename or Wallet Address (Shows only one) */}
           {account?.address && (
             <div className="w-full flex justify-center items-center text-center">
               <p className="text-sm text-slate-500">
@@ -91,7 +91,7 @@ function Header() {
 
         {/* Right Logo */}
         <div className="text-xl">
-          <Image src="/basenet/BASE LOGO.png" height={30} width={30} alt="" className="" />
+          <Image src="/basenet/BASE LOGO.png" height={30} width={30} alt="" />
         </div>
       </div>
     </>
