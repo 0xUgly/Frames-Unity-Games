@@ -8,15 +8,21 @@ import { ThirdwebClient } from "~/constants";
 import { shortenAddress } from "thirdweb/utils";
 import { base } from "viem/chains";
 import { Name } from "@coinbase/onchainkit/identity";
+import { ethers } from "ethers";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://framegames.xyz/"; // ✅ Set correct domain
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://framegames.xyz"; // ✅ Use your custom domain
+
+// **ERC20 Token Contract Details**
+const ERC20_ADDRESS = "0x66D51EF7Bc2a1951Cacdb17ff1B458DFec28a2Ef"; // ✅ Replace with your token's contract address
+const ERC20_ABI = ["function balanceOf(address owner) view returns (uint256)"];
 
 function Header() {
   const [isSDKLoaded, setIsSDKLoaded] = useState(false);
-  const [context, setContext] = useState<FrameContext | null>(null); // ✅ Ensure correct type
+  const [context, setContext] = useState<FrameContext>();
   const { connect } = useConnect();
   const wallet = useActiveWallet();
   const account = useActiveAccount();
+  const [tokenBalance, setTokenBalance] = useState<string | null>(null);
 
   const connectWallet = useCallback(async () => {
     connect(async () => {
@@ -30,12 +36,29 @@ function Header() {
     });
   }, [connect]);
 
+  // **Fetch ERC20 Token Balance**
+  const fetchTokenBalance = useCallback(async () => {
+    if (!account?.address) return;
+
+    try {
+      const provider = new ethers.JsonRpcProvider("https://mainnet.base.org"); // ✅ Base Mainnet RPC
+      const contract = new ethers.Contract(ERC20_ADDRESS, ERC20_ABI, provider);
+      const balance = await contract.balanceOf(account.address);
+
+      // Convert balance from wei format (assuming 18 decimals)
+      const formattedBalance = ethers.formatUnits(balance, 18);
+      setTokenBalance(formattedBalance);
+    } catch (error) {
+      console.error("Error fetching token balance:", error);
+      setTokenBalance(null);
+    }
+  }, [account?.address]);
+
   useEffect(() => {
     const load = async () => {
       try {
-        const frameContext = await sdk.context; // ✅ Await the correct context
-
-        setContext(frameContext); // ✅ Set the correct Farcaster context
+        const frameContext = await sdk.context;
+        setContext(frameContext);
         sdk.actions.ready({});
       } catch (error) {
         console.error("Error fetching Farcaster context:", error);
@@ -50,6 +73,10 @@ function Header() {
       }
     }
   }, [isSDKLoaded, connectWallet]);
+
+  useEffect(() => {
+    fetchTokenBalance();
+  }, [account?.address, fetchTokenBalance]);
 
   return (
     <>
@@ -85,12 +112,19 @@ function Header() {
             )}
           </div>
 
-          {/* Basename or Wallet Address (Shows only one) */}
+          {/* Basename or Wallet Address */}
           {account?.address && (
             <div className="w-full flex justify-center items-center text-center">
               <p className="text-sm text-slate-500">
                 <Name address={account.address} chain={base} fallback={shortenAddress(account.address)} />
               </p>
+            </div>
+          )}
+
+          {/* Display Token Balance Below Address */}
+          {tokenBalance !== null && (
+            <div className="text-sm text-slate-400">
+              Balance: {tokenBalance} XP
             </div>
           )}
         </div>
