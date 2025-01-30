@@ -1,12 +1,12 @@
 "use client";
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import sdk, { type FrameContext } from "@farcaster/frame-sdk";
 import { useActiveAccount, useActiveWallet, useConnect } from "thirdweb/react";
 import { EIP1193 } from "thirdweb/wallets";
 import { ThirdwebClient } from "~/constants";
 import { shortenAddress } from "thirdweb/utils";
-import { base } from "thirdweb/chains";
+import { base } from "viem/chains";
 import { Name } from "@coinbase/onchainkit/identity";
 
 function Header() {
@@ -18,13 +18,12 @@ function Header() {
 
   const connectWallet = useCallback(async () => {
     connect(async () => {
-      // Create a wallet instance from the Warpcast provider
-      const wallet = EIP1193.fromProvider({ provider: sdk.wallet.ethProvider });
+      const wallet = EIP1193.fromProvider({
+        provider: sdk.wallet.ethProvider,
+      });
 
-      // Trigger the connection
       await wallet.connect({ client: ThirdwebClient });
 
-      // Return the wallet to the app context
       return wallet;
     });
   }, [connect]);
@@ -56,8 +55,6 @@ function Header() {
           {/* Profile Picture */}
           <div className="rounded-full m-auto overflow-hidden border-slate-800 border-2 size-16">
             {context?.user.pfpUrl ? (
-              // We intentionally don't use Next.js' Image here since we can't predict the domain
-              // eslint-disable-next-line @next/next/no-img-element
               <img
                 className="object-cover size-full"
                 src={context?.user.pfpUrl}
