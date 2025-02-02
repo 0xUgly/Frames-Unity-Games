@@ -82,14 +82,16 @@ function Header() {
         {/* User Details */}
         <div className="text-right">
           {/* Base Name or Address */}
-          {account?.address && (
+          {account?.address ? (
             <p className="text-sm font-semibold">
               <Name
                 address={account.address}
                 chain={base}
-                fallback={shortenAddress(account.address)}
+                fallback={shortenAddress(account.address)} // Fallback to address if no base name
               />
             </p>
+          ) : (
+            <p className="text-sm font-semibold">No Address Found</p>
           )}
 
           {/* XP Display */}
