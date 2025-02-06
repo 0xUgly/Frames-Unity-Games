@@ -83,56 +83,45 @@ function Header() {
       <div className="flex items-center justify-between">
         {/* Left Logo */}
         <div className="text-xl font-bold">
-          <Image src="/partners/rl.png" height={30} width={30} alt="" />
+          <Image src="/partners/rl.png" height={50} width={50} alt="" />
         </div>
 
-        {/* Center User Info */}
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex items-center gap-4">
+          {/* User Details */}
+          <div className="text-right">
+            {/* Base Name or Wallet Address */}
+            {account?.address && (
+              <p className="text-sm font-semibold text-slate-300">
+                <Name
+                  address={account.address}
+                  chain={base}
+                  fallback={shortenAddress(account.address)}
+                />
+              </p>
+            )}
+
+            {/* XP Display */}
+            {tokenBalance !== null && (
+              <p className="text-sm font-bold text-white">
+                {tokenBalance}xp
+              </p>
+            )}
+          </div>
+
           {/* Profile Picture */}
-          <div className="rounded-full m-auto overflow-hidden border-slate-800 border-2 size-16">
+          <div className="overflow-hidden w-12 h-12 rounded-lg border-2 border-foreground">
             {context?.user.pfpUrl ? (
               <img
-                className="object-cover size-full"
                 src={context?.user.pfpUrl}
-                alt={context?.user.displayName ?? "User Profile Picture"}
-                width={50}
-                height={50}
+                alt={context?.user.displayName ?? "User Profile"}
+                className="w-full h-full object-cover"
               />
             ) : (
-              <div className="flex items-center justify-center size-full bg-slate-800 animate-pulse rounded-full" />
+              <div className="w-full h-full bg-slate-800 animate-pulse" />
             )}
           </div>
-
-          {/* User Display Name */}
-          <div className="w-full flex justify-center items-center text-center">
-            {context?.user.displayName ? (
-              <h1 className="text-md font-bold text-center">{context?.user.displayName}</h1>
-            ) : (
-              <div className="animate-pulse w-36 m-auto h-8 bg-slate-800 rounded-md" />
-            )}
-          </div>
-
-          {/* Basename or Wallet Address */}
-          {account?.address && (
-            <div className="w-full flex justify-center items-center text-center">
-              <p className="text-sm text-slate-500">
-                <Name address={account.address} chain={base} fallback={shortenAddress(account.address)} />
-              </p>
-            </div>
-          )}
-
-          {/* Display Token Balance Below Address */}
-          {tokenBalance !== null && (
-            <div className="text-sm text-slate-400">
-              Balance: {tokenBalance} XP
-            </div>
-          )}
         </div>
 
-        {/* Right Logo */}
-        <div className="text-xl">
-          <Image src="/basenet/BASE LOGO.png" height={30} width={30} alt="" />
-        </div>
       </div>
     </>
   );
