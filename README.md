@@ -1,5 +1,5 @@
 **Paste this URL in Farcaster to post the frame**
-https://rupturelabswarp.vercel.app/
+https://framegames.xyz
 
 
 # Open-Source-Frames-2.0-Unity-Games
