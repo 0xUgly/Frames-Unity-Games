@@ -95,7 +95,6 @@ function Header() {
                 <Name
                   address={account.address as `0x${string}`}
                   chain={base}
-                  fallback={shortenAddress(account.address)}
                 />
               </p>
             )}
