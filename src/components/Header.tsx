@@ -93,7 +93,7 @@ function Header() {
             {account?.address && (
               <p className="text-sm font-semibold text-slate-300">
                 <Name
-                  address={account.address}
+                  address={account.address as `0x${string}`}
                   chain={base}
                   fallback={shortenAddress(account.address)}
                 />
