@@ -1,3 +1,11 @@
+// Existing code below...
+// app/unity6/page.tsx // Corrected comment
+"use client";
+
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+
 import { Metadata } from "next"; // Import Metadata type
 
 const appUrl = process.env.NEXT_PUBLIC_URL || "http://localhost:3000"; // Ensure appUrl is defined
@@ -36,13 +44,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-// Existing code below...
-// app/unity6/page.tsx // Corrected comment
-"use client";
-
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
 
 function Unity6Page() {
   const searchParams = useSearchParams();
