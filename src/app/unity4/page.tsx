@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Unity4ClientComponent from "./client"; // Import the new client component
 
-const appUrl = process.env.NEXT_PUBLIC_URL || "http://localhost:3000";
+const appUrl = process.env.NEXT_PUBLIC_URL || "https://framegames.xyz"; // Use custom domain as fallback
 const gameName = "Paws of Fury";
 const gameImageUrl = `${appUrl}/gameimg/cat.png`;
 const gameRoute = "/unity4";

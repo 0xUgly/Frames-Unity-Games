@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
-// Get the base URL from environment variables, default to localhost for development
-const appUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
+// Get the base URL from environment variables, default to the custom domain
+const appUrl = process.env.NEXT_PUBLIC_URL || 'https://framegames.xyz'; // Use custom domain as fallback
 
 // Define the Farcaster MiniApp manifest content
 const manifest = {

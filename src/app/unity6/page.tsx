@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Unity6ClientComponent from "./client"; // Import the new client component
 
-const appUrl = process.env.NEXT_PUBLIC_URL || "http://localhost:3000";
+const appUrl = process.env.NEXT_PUBLIC_URL || "https://framegames.xyz"; // Use custom domain as fallback
 const gameName = "Base Neko";
 const gameImageUrl = `${appUrl}/gameimg/bASE_NEKO_lg.png`;
 const gameRoute = "/unity6";
