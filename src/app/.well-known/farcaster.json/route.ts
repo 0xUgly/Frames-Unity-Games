@@ -21,7 +21,7 @@ const accountAssociation = {
 
 // Define the Farcaster MiniApp frame details (matching sample structure)
 const frameDetails = {
-  // version: "1", // Optional: Add if needed
+  version: "next", // Required field for manifest validation
   name: "Rupture Labs Games",        // Your MiniApp's name
   iconUrl: `${appUrl}/icon.png`,      // URL to your app's icon
   homeUrl: `${appUrl}/`,              // The root URL where your initial frame is served
