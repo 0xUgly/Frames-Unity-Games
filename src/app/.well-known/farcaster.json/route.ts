@@ -11,7 +11,11 @@ const appUrl = process.env.NEXT_PUBLIC_URL || 'https://framegames.xyz'; // Use c
 //   "payload": "eyJkb21haW4iOiJ5b2luay5wYXJ0eSJ9",
 //   "signature": "MHgwZmJiYWIwODg3YTU2MDFiNDU3MzVkOTQ5MDRjM2Y1NGUxMzVhZTQxOGEzMWQ5ODNhODAzZmZlYWNlZWMyZDYzNWY4ZTFjYWU4M2NhNTAwOTMzM2FmMTc1NDlmMDY2YTVlOWUwNTljNmZiNDUxMzg0Njk1NzBhODNiNjcyZWJjZTFi"
 // };
-const accountAssociation = null;
+const accountAssociation = {
+    "header": "eyJmaWQiOjc4NzMsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgzNGY1MzJiOWQ0Yzg4OGExODViN2Q1NGU2MGQzNDc4ODVhNjg0OWRkIn0=",
+    "payload": "eyJkb21haW4iOiJmcmFtZWdhbWVzLnh5eiJ9",
+    "signature": "0x8243797617fe73faad414a8db66e86ddb6ef9f0a173eef901388394159b8998f13bd5891b0815c98b1df4a6653d443559cd5139c73f0cf5af176051625d463ae1c"
+  };
 // --- END USER ACTION REQUIRED ---
 
 
