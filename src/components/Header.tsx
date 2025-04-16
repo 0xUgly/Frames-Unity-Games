@@ -87,38 +87,46 @@ function Header() {
         </div>
 
         <div className="flex items-center gap-4">
-          {/* User Details */}
-          <div className="text-right">
-            {/* Base Name or Wallet Address */}
-            {account?.address && (
-              <p className="text-sm font-semibold text-slate-300">
-                <Name
-                  address={account.address as `0x${string}`}
-                  chain={base}
-                />
-              </p>
-            )}
-
-            {/* XP Display */}
-            {tokenBalance !== null && (
-              <p className="text-sm font-bold text-white">
-                {tokenBalance}xp
-              </p>
-            )}
-          </div>
-
-          {/* Profile Picture */}
-          <div className="overflow-hidden w-12 h-12 rounded-lg border-2 border-foreground">
-            {context?.user.pfpUrl ? (
-              <img
-                src={context?.user.pfpUrl}
-                alt={context?.user.displayName ?? "User Profile"}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full bg-slate-800 animate-pulse" />
-            )}
-          </div>
+          {/* User Details or Connect Button */}
+          {account?.address ? (
+            <>
+              <div className="text-right">
+                {/* Base Name or Wallet Address */}
+                <p className="text-sm font-semibold text-slate-300">
+                  <Name
+                    address={account.address as `0x${string}`}
+                    chain={base}
+                  />
+                </p>
+                {/* XP Display */}
+                {tokenBalance !== null && (
+                  <p className="text-sm font-bold text-white">
+                    {tokenBalance}xp
+                  </p>
+                )}
+              </div>
+              {/* Profile Picture */}
+              <div className="overflow-hidden w-12 h-12 rounded-lg border-2 border-foreground">
+                {context?.user.pfpUrl ? (
+                  <img
+                    src={context?.user.pfpUrl}
+                    alt={context?.user.displayName ?? "User Profile"}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-slate-800 animate-pulse" />
+                )}
+              </div>
+            </>
+          ) : (
+            // Manual Connect Button if not connected
+            <button
+              onClick={connectWallet} // Use the existing connectWallet function
+              className="rounded-lg border-2 border-foreground px-4 py-2 text-sm font-medium text-foreground hover:bg-foreground/10"
+            >
+              Connect Wallet
+            </button>
+          )}
         </div>
 
       </div>

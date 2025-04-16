@@ -1,25 +1,38 @@
+import { NextResponse } from 'next/server';
+
+// Get the base URL from environment variables, default to localhost for development
+const appUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
+
+// Define the Farcaster MiniApp manifest content
+const manifest = {
+  name: "Rupture Labs Games", // Your MiniApp's name
+  description: "Play Unity WebGL games directly on Farcaster.", // A brief description
+  icon: `${appUrl}/icon.png`, // URL to your app's icon (ensure public/icon.png exists)
+  launchUrl: `${appUrl}/`, // The root URL where your initial frame is served
+  // Add other optional fields as needed, e.g., developer details
+  // developer: {
+  //   name: "Rupture Labs",
+  //   url: "https://your-website.com"
+  // }
+};
+
 export async function GET() {
-  const appUrl = process.env.NEXT_PUBLIC_URL;
-
-  const config = {
-    accountAssociation: {
-      header:
-        "eyJmaWQiOjM2MjEsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgyY2Q4NWEwOTMyNjFmNTkyNzA4MDRBNkVBNjk3Q2VBNENlQkVjYWZFIn0",
-      payload: "eyJkb21haW4iOiJmcmFtZXMtdjIudmVyY2VsLmFwcCJ9",
-      signature:
-        "MHhiNDIwMzQ1MGZkNzgzYTExZjRiOTllZTFlYjA3NmMwOTdjM2JkOTY1NGM2ODZjYjkyZTAyMzk2Y2Q0YjU2MWY1MjY5NjI5ZGQ5NTliYjU0YzEwOGI4OGVmNjdjMTVlZTdjZDc2YTRiMGU5NzkzNzA3YzkxYzFkOWFjNTg0YmQzNjFi",
+  return NextResponse.json(manifest, {
+    headers: {
+      'Content-Type': 'application/json',
+      // Optional: Add caching headers if desired
+      // 'Cache-Control': 'public, max-age=3600, s-maxage=3600',
     },
-    frame: {
-      version: "1",
-      name: "Thirdweb Frames Starter",
-      iconUrl: `${appUrl}/icon.png`,
-      homeUrl: appUrl,
-      imageUrl: `${appUrl}/frame.png`,
-      buttonTitle: "Launch Frame",
-      splashImageUrl: `${appUrl}/splash.png`,
-      splashBackgroundColor: "#0f172a",
-    },
-  };
-
-  return Response.json(config);
+  });
 }
+
+// Optional: Handle OPTIONS requests for CORS if needed, though typically not required for .well-known
+// export async function OPTIONS() {
+//   return new NextResponse(null, {
+//     status: 204,
+//     headers: {
+//       'Allow': 'GET, OPTIONS',
+//       // Add CORS headers if your setup requires them
+//     },
+//   });
+// }

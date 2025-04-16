@@ -1,3 +1,42 @@
+import { Metadata } from "next"; // Import Metadata type
+
+const appUrl = process.env.NEXT_PUBLIC_URL || "http://localhost:3000"; // Ensure appUrl is defined
+const gameName = "Paws of Fury"; // Game specific info
+const gameImageUrl = `${appUrl}/gameimg/cat.png`; // Game specific image
+const gameRoute = "/unity4"; // Game specific route
+
+// Define the frame metadata for this specific game page
+const frame = {
+  version: "next",
+  imageUrl: gameImageUrl,
+  button: {
+    title: `Play ${gameName}`,
+    action: {
+      type: "launch_frame",
+      name: `Play ${gameName}`, // Frame name
+      url: `${appUrl}${gameRoute}`, // URL to launch directly into this game
+      splashImageUrl: `${appUrl}/splash.png`, // Use the general splash
+      splashBackgroundColor: "#0f172a",
+    },
+  },
+};
+
+// Export generateMetadata function
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: gameName, // Set page title
+    openGraph: {
+      title: gameName,
+      description: `Play ${gameName} on Farcaster!`,
+      images: [gameImageUrl],
+    },
+    other: {
+      "fc:frame": JSON.stringify(frame), // Add the frame metadata
+    },
+  };
+}
+
+// Existing code below...
 // app/unity4/page.tsx
 "use client";
 

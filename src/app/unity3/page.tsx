@@ -1,4 +1,43 @@
-// app/unity2/page.tsx
+import { Metadata } from "next"; // Import Metadata type
+
+const appUrl = process.env.NEXT_PUBLIC_URL || "http://localhost:3000"; // Ensure appUrl is defined
+const gameName = "Builders Bounce"; // Game specific info
+const gameImageUrl = `${appUrl}/gameimg/buildersbounce.png`; // Game specific image
+const gameRoute = "/unity3"; // Game specific route
+
+// Define the frame metadata for this specific game page
+const frame = {
+  version: "next",
+  imageUrl: gameImageUrl,
+  button: {
+    title: `Play ${gameName}`,
+    action: {
+      type: "launch_frame",
+      name: `Play ${gameName}`, // Frame name
+      url: `${appUrl}${gameRoute}`, // URL to launch directly into this game
+      splashImageUrl: `${appUrl}/splash.png`, // Use the general splash
+      splashBackgroundColor: "#0f172a",
+    },
+  },
+};
+
+// Export generateMetadata function
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: gameName, // Set page title
+    openGraph: {
+      title: gameName,
+      description: `Play ${gameName} on Farcaster!`,
+      images: [gameImageUrl],
+    },
+    other: {
+      "fc:frame": JSON.stringify(frame), // Add the frame metadata
+    },
+  };
+}
+
+// Existing code below...
+// app/unity3/page.tsx // Corrected comment
 "use client";
 
 import { useEffect, useState } from "react";
