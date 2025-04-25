@@ -1,17 +1,18 @@
 {
   "accountAssociation": {
-    "header": "eyJmaWQiOjc4NzMsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgzNGY1MzJiOWQ0Yzg4OGExODViN2Q1NGU2MGQzNDc4ODVhNjg0OWRkIn0=",
+    "header": "eyJmaWQiOjc4NzMsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgzNGY1MzJiOUQ0Yzg4OEExODVCN2Q1NGU2MGQzNDc4ODVBNjg0OWRkIn0",
     "payload": "eyJkb21haW4iOiJmcmFtZWdhbWVzLnh5eiJ9",
-    "signature": "0x8243797617fe73faad414a8db66e86ddb6ef9f0a173eef901388394159b8998f13bd5891b0815c98b1df4a6653d443559cd5139c73f0cf5af176051625d463ae1c"
+    "signature": "MHhhZmNkMDE0NzIxNzhkMjk1ZjZkYjI3Y2RjNzljMjE4ZTYwYjRiYWY0ZTk4Y2UxODRjZWNkZWY2MmM5MjY0ZDQ2MzBjM2I4OWQyN2NmNDQxNjQzYjU0MjgxMTVlNzY0MDEwMmI3Nzc0ODhhOGM0YmFjM2FiZmUzM2VkY2RhN2M1NzFi"
   },
   "frame": {
     "version": "1",
-    "name": "Rupture Labs Games",
+    "name": "Example Frame",
     "iconUrl": "https://framegames.xyz/icon.png",
     "homeUrl": "https://framegames.xyz/",
-    "imageUrl": "https://framegames.xyz/frame.png",
-    "buttonTitle": "Launch Games",
+    "imageUrl": "https://framegames.xyz/image.png",
+    "buttonTitle": "Check this out",
     "splashImageUrl": "https://framegames.xyz/splash.png",
-    "splashBackgroundColor": "#0f172a"
+    "splashBackgroundColor": "#eeccff",
+    "webhookUrl": "https://framegames.xyz/api/webhook"
   }
 }
